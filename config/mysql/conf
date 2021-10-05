@@ -1,3 +1,2 @@
 [mysqld]
 sql_mode='';
-bind-address=0.0.0.0

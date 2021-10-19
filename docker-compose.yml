@@ -101,11 +101,10 @@ services:
     ports:
         - 82:80
     environment:
-        - PMA_HOST=mysql
-        - PMA_PORT=3306
-        - MYSQL_ROOT_PASSWORD= rootpassword
-        - MYSQL_USER= test
-        - MYSQL_PASSWORD= test
+        - PMA_ARBITRARY=1
+        - PMA_HOSTS=mysql,mariadb
+        - PMA_PORTS=3306,3306
+   
     volumes:
         - /sessions
     depends_on:

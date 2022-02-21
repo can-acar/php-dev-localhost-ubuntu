@@ -65,6 +65,7 @@ services:
         working_dir: /app
         volumes:
           - .:/app
+          - ./dbdata/mysql:/var/lib/mysql
         environment:
           - MYSQL_ROOT_PASSWORD=rootpassword
           - MYSQL_DATABASE=test_db
@@ -83,6 +84,7 @@ services:
         working_dir: /app
         volumes:
           - .:/app
+          - ./dbdata/mariadb:/var/lib/mysql
         environment:
           - MYSQL_ROOT_PASSWORD=rootpassword
           - MYSQL_DATABASE=test_db
@@ -94,21 +96,26 @@ services:
               - inter   
               - backend
 
+
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    depends_on:
-      - mysql
+  
     ports:
         - 82:80
     environment:
         - PMA_ARBITRARY=1
         - PMA_HOSTS=mysql,mariadb
         - PMA_PORTS=3306,3306
-   
+        - UPLOAD_LIMIT =  256M
     volumes:
-        - /sessions
+        - .:/var/lib/phpmyadmin/tmp
     depends_on:
         - mariadb
+        - mysql
+    links:
+        - mariadb
+        - mysql
     container_name: phpmyadmin
     networks: 
         - inter   
@@ -122,34 +129,67 @@ services:
         networks: 
           - inter   
           - backend
+volumes:
+
+  mariadb:
+    external: true
+    name: mariadb
+  mysql:
+    external: true
+    name: mysql
+
+  www:
+    external: true
+    name: www
+  source:
+    external: true
+    name: source
+  www_data:
+    external: true
+    name: www_data
+  app:
+    external: true
+    name: app
+  dbdata:
+    external: true
+    name: dbdata
+  config:
+    external: true
+    name: config
+  php:
+    external: true
+    name: php
+  php_data:
+    external: true
+    name: php_data
 
 networks: 
   frontend:
-    name: "frontend"
+    name: "frontend_2bf7"
     driver: "bridge"
     driver_opts: 
-      com.docker.network.bridge.name: "frontend"
+      com.docker.network.bridge.name: "frontend_2bf7"
     ipam: 
       driver: default
       config: 
         - subnet: 172.25.0.0/16
         
   backend:
-    name: "backend"
+    name: "backend_2bf7"
     driver: "bridge"
     driver_opts:
-      com.docker.network.bridge.name: "backend"
+      com.docker.network.bridge.name: "backend_2bf7"
     ipam: 
       driver: default
       config: 
         - subnet: 172.21.0.0/16
       
   inter:
-    name: "inter"
+    name: "inter_8ebf0"
     driver: "bridge"
     internal: true
     driver_opts:
-      com.docker.network.bridge.name: "inter"
+      com.docker.network.bridge.name: "inter_8ebf0"
     ipam: 
       driver: default
       config: 

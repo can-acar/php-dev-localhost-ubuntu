@@ -29,3 +29,5 @@ dbdata/mysql/ib_buffer_pool
 dbdata/mysql/ib_logfile0
 dbdata/mysql/ibdata1
 dbdata/mysql/ibtmp1
+/config/vhost
+/config/vhost/

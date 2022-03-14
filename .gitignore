@@ -17,3 +17,15 @@ wp-content/plugins/hello.php
 /sitemap.xml
 /sitemap.xml.gz
 
+/dbdata/
+/www/
+/diyaliz.dev
+dbdata/mariadb/aria_log.00000001
+dbdata/mariadb/aria_log_control
+dbdata/mariadb/ib_logfile0
+dbdata/mariadb/ibdata1
+dbdata/mariadb/ibtmp1
+dbdata/mysql/ib_buffer_pool
+dbdata/mysql/ib_logfile0
+dbdata/mysql/ibdata1
+dbdata/mysql/ibtmp1

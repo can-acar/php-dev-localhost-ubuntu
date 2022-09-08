@@ -24,7 +24,7 @@ services:
     container_name: php-5
     working_dir: /app
     ports:
-      - "9000:9000"
+      - "9002:9002"
     volumes:
         - .:/app
         - ./config/php.5.6/php-fpm.ini:/usr/local/etc/php/php.ini
@@ -50,8 +50,8 @@ services:
       - DOCUMENT_ROOT=/app/www
     volumes:
         - .:/app
-        - ./config/php/php-fpm.ini:/usr/local/etc/php/php.ini
-        - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        - ./config/php.8.0/php-fpm.ini:/usr/local/etc/php/php.ini
+        - ./config/php.8.0/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         - /d/www:/mnt/www
         - /d:/mnt/source
     networks: 
@@ -100,16 +100,16 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-  
+    #restart: always
     ports:
         - 82:80
     environment:
-        - PMA_ARBITRARY=1
-        - PMA_HOSTS=mysql,mariadb
-        - PMA_PORTS=3306,3306
-        - UPLOAD_LIMIT =  256M
+        PMA_ARBITRARY : 1
+        PMA_HOSTS: mysql,mariadb
+        PMA_PORTS: 3306,3306
+        UPLOAD_LIMIT: 102400K
     volumes:
-        - .:/var/lib/phpmyadmin/tmp
+        - ./config/phpmyadmin/uploads.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
     depends_on:
         - mariadb
         - mysql

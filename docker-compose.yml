@@ -11,6 +11,7 @@ services:
       - ./config/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - /d/www:/mnt/www
       - /d:/mnt/source
+      - /d/www/diyaliz:/mnt/www/diyaliz
    
     ports:
       - "80:80"
@@ -23,8 +24,9 @@ services:
     build: config/php.5.6
     container_name: php-5
     working_dir: /app
-    ports:
-      - "9002:9002"
+    # ports:
+    #   - "9002:9000"
+    #   - "9009:9009"
     volumes:
         - .:/app
         - ./config/php.5.6/php-fpm.ini:/usr/local/etc/php/php.ini
@@ -39,8 +41,9 @@ services:
     build: config/php.8.0
     container_name: php-8
     working_dir: /app
-    ports:
-      - "9001:9001"
+    # ports:
+    #   - "9001:9000"
+    #   - "9003:9003"
     
     environment:
       - MYSQL_HOST=mysql

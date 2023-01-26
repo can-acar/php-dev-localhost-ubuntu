@@ -1,5 +1,6 @@
 FROM php:5.6-fpm
 
+WORKDIR "/app"
 # Install required packages and PHP extensions
 RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
@@ -9,6 +10,13 @@ RUN apt-get update && apt-get install -y \
         libmagickwand-dev \
         libxslt1-dev \
         mysql-client \
+        libcurl4-openssl-dev \
+        libxml2-dev \
+        libicu-dev \
+        libxslt-dev \
+        libzip-dev \
+        git\
+        libpq-dev \
     && pecl install imagick \
     && docker-php-ext-enable imagick \
     && pecl install xdebug-2.5.5 \
@@ -26,6 +34,18 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/local/bin --filename=composer
 
+# Install redis
+RUN pecl install redis-2.2.8 \
+    && docker-php-ext-enable redis
+
+# Install mongodb
+RUN pecl install mongodb-1.5.4 \
+    && docker-php-ext-enable mongodb
+
+# Install GD
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install gd
+
 
 RUN mkdir -p /tmp/session
 RUN chmod 777 /tmp/session
@@ -40,8 +60,5 @@ RUN chmod 777 /tmp/logs
 RUN mkdir -p /tmp/uploads
 RUN chmod 777 /tmp/uploads
 
-
-RUN mkdir -p /app
-WORKDIR "/app"
-
+# Set the user and group to run the container
 RUN usermod -u 1000 www-data && usermod -a -G users www-data

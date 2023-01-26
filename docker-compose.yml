@@ -179,7 +179,7 @@ networks:
     ipam: 
       driver: default
       config: 
-        - subnet: 172.25.0.0/16
+        - subnet: 192.168.10.0/25
         
   backend:
     name: "backend_2bf7"
@@ -189,15 +189,15 @@ networks:
     ipam: 
       driver: default
       config: 
-        - subnet: 172.21.0.0/16
+        - subnet: 192.168.20.0/25
       
   inter:
-    name: "inter_8ebf0"
+    name: "internet_2bf7"
     driver: "bridge"
     internal: true
     driver_opts:
-      com.docker.network.bridge.name: "inter_8ebf0"
+      com.docker.network.bridge.name: "internet_2bf7"
     ipam: 
       driver: default
       config: 
-        - subnet: 172.23.0.0/16
+        - subnet: 192.168.30.0/25

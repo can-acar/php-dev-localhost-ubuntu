@@ -1,7 +1,6 @@
-version: '3'
+version: "3"
 
 services:
-
   webserver:
     image: nginx:1.19.0
     container_name: webserver
@@ -12,41 +11,21 @@ services:
       - /d/www:/mnt/www
       - /d:/mnt/source
       - /d/www/diyaliz:/mnt/www/diyaliz
-   
+
     ports:
       - "80:80"
       - "443:443"
-    networks: 
-        - frontend
-        - inter
+    networks:
+      - frontend
+      - inter
 
   php5:
-    build: config/php.5.6
+    build: config/php5
     container_name: php-5
     working_dir: /app
     # ports:
     #   - "9002:9000"
     #   - "9009:9009"
-    volumes:
-        - .:/app
-        - ./config/php.5.6/php-fpm.ini:/usr/local/etc/php/php.ini
-        - ./config/php.5.6/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-        - /d/session:/mnt/session
-        - /d/uploads:/mnt/uploads
-        - /d/www:/mnt/www
-        - /d:/mnt/source
-    networks: 
-      - inter   
-      - backend
-  
-  php8:
-    build: config/php.8.0
-    container_name: php-8
-    working_dir: /app
-    # ports:
-    #   - "9001:9000"
-    #   - "9003:9003"
-    
     environment:
       - MYSQL_HOST=mysql
       - MYSQL_USER=test
@@ -54,90 +33,137 @@ services:
       - MYSQL_DB=test_db
       - DOCUMENT_ROOT=/app/www
     volumes:
-        - .:/app
-        - ./config/php.8.0/php-fpm.ini:/usr/local/etc/php/php.ini
-        - ./config/php.8.0/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
-        - /d/session:/mnt/session
-        - /d/uploads:/mnt/uploads
-        - /d/www:/mnt/www
-        - /d:/mnt/source
-    networks: 
-      - inter   
+      - .:/app
+      - ./config/php5/php-fpm.ini:/usr/local/etc/php/php.ini
+      - ./config/php5/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - /d/session:/mnt/session
+      - /d/uploads:/mnt/uploads
+      - /d/www:/mnt/www
+      - /d:/mnt/source
+    networks:
+      - inter
       - backend
 
-      
+  php7:
+    build: config/php7
+    container_name: php-7
+    working_dir: /app
+    # ports:
+    #   - "9000:9000"
+    #   - "9002:9002"
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_DB=test_db
+      - DOCUMENT_ROOT=/app/www
+    volumes:
+      - .:/app
+      - ./config/php7/php-fpm.ini:/usr/local/etc/php/php.ini
+      - ./config/php7/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - /d/session:/mnt/session
+      - /d/uploads:/mnt/uploads
+      - /d/www:/mnt/www
+      - /d:/mnt/source
+    networks:
+      - inter
+      - backend
+
+  php8:
+    build: config/php8
+    container_name: php-8
+    working_dir: /app
+    # ports:
+    #   - "9001:9000"
+    #   - "9003:9003"
+
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_DB=test_db
+      - DOCUMENT_ROOT=/app/www
+    volumes:
+      - .:/app
+      - ./config/php8/php-fpm.ini:/usr/local/etc/php/php.ini
+      - ./config/php8/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - /d/session:/mnt/session
+      - /d/uploads:/mnt/uploads
+      - /d/www:/mnt/www
+      - /d:/mnt/source
+    networks:
+      - inter
+      - backend
+
   mysql:
-        image: mysql:5.7.35
-        container_name: mysql
-        working_dir: /app
-        volumes:
-          - .:/app
-          - ./dbdata/mysql:/var/lib/mysql
-        environment:
-          - MYSQL_ROOT_PASSWORD=rootpassword
-          - MYSQL_DATABASE=test_db
-          - MYSQL_USER=test
-          - MYSQL_PASSWORD=test
-        ports:
-          - "3306:3306"
-        networks: 
-          - inter   
-          - backend
-        command: mysqld --sql_mode="" --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    image: mysql:5.7.35
+    container_name: mysql
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./dbdata/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=test_db
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    ports:
+      - "3306:3306"
+    networks:
+      - inter
+      - backend
+    command: mysqld --sql_mode="" --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
 
   mariadb:
-        image: mariadb:10.3
-        container_name: mariadb
-        working_dir: /app
-        volumes:
-          - .:/app
-          - ./dbdata/mariadb:/var/lib/mysql
-        environment:
-          - MYSQL_ROOT_PASSWORD=rootpassword
-          - MYSQL_DATABASE=test_db
-          - MYSQL_USER=test
-          - MYSQL_PASSWORD=test
-        ports:
-          - "3307:3306"  
-        networks: 
-              - inter   
-              - backend
-
-
+    image: mariadb:10.3
+    container_name: mariadb
+    working_dir: /app
+    volumes:
+      - .:/app
+      - ./dbdata/mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=test_db
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+    ports:
+      - "3307:3306"
+    networks:
+      - inter
+      - backend
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     #restart: always
     ports:
-        - 82:80
+      - 82:80
     environment:
-        PMA_ARBITRARY : 1
-        PMA_HOSTS: mysql,mariadb
-        PMA_PORTS: 3306,3306
-        UPLOAD_LIMIT: 102400K
+      PMA_ARBITRARY: 1
+      PMA_HOSTS: mysql,mariadb
+      PMA_PORTS: 3306,3306
+      UPLOAD_LIMIT: 102400K
     volumes:
-        - ./config/phpmyadmin/uploads.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
+      - ./config/phpmyadmin/uploads.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
     depends_on:
-        - mariadb
-        - mysql
+      - mariadb
+      - mysql
     links:
-        - mariadb
-        - mysql
+      - mariadb
+      - mysql
     container_name: phpmyadmin
-    networks: 
-        - inter   
-        - backend
+    networks:
+      - inter
+      - backend
 
   maildev:
-        image: djfarrelly/maildev
-        container_name: maildev
-        ports:
-            - 83:80
-        networks: 
-          - inter   
-          - backend
+    image: djfarrelly/maildev
+    container_name: maildev
+    ports:
+      - 83:80
+    networks:
+      - inter
+      - backend
 volumes:
-
   mariadb:
     external: true
     name: mariadb
@@ -170,34 +196,34 @@ volumes:
     external: true
     name: php_data
 
-networks: 
+networks:
   frontend:
     name: "frontend_2bf7"
     driver: "bridge"
-    driver_opts: 
+    driver_opts:
       com.docker.network.bridge.name: "frontend_2bf7"
-    ipam: 
+    ipam:
       driver: default
-      config: 
+      config:
         - subnet: 192.168.10.0/25
-        
+
   backend:
     name: "backend_2bf7"
     driver: "bridge"
     driver_opts:
       com.docker.network.bridge.name: "backend_2bf7"
-    ipam: 
+    ipam:
       driver: default
-      config: 
+      config:
         - subnet: 192.168.20.0/25
-      
+
   inter:
     name: "internet_2bf7"
     driver: "bridge"
     internal: true
     driver_opts:
       com.docker.network.bridge.name: "internet_2bf7"
-    ipam: 
+    ipam:
       driver: default
-      config: 
+      config:
         - subnet: 192.168.30.0/25

@@ -159,6 +159,7 @@ services:
     container_name: maildev
     ports:
       - 83:80
+      - 25:25
     networks:
       - inter
       - backend
